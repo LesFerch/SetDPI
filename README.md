@@ -6,7 +6,7 @@ This is a console app to change the windows display scaling setting via the comm
 
 Only the preset display scaling values are supported, such as 100, 125, 150, 175, and so on. Custom display scaling values cannot be used.
 
-This app is a fork of https://github.com/imniko/SetDPI. It provides all of the functionality of the original, but also supports an additional optional argument to restart Explorer and runs on both 32 bit and 64 bit Windows.
+This app is a fork of <https://github.com/imniko/SetDPI>. It provides all of the functionality of the original, but also supports an additional optional argument to restart Explorer and runs on both 32 bit and 64 bit Windows.
 
 # How to Download and Run
 
@@ -43,4 +43,4 @@ Display the scale of monitor 2: `SetDPI value 2` displays `125`
 
 ## Credits
 
-https://github.com/lihas/windows-DPI-scaling-sample
+<https://github.com/lihas/windows-DPI-scaling-sample>
