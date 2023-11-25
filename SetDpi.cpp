@@ -5,11 +5,10 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstdlib>
 using namespace std;
 
-/*Get default DPI scaling percentage.
-The OS recommented value.
-*/
+// Get OS recommended scale
 int GetRecommendedDPIScaling()
 {
     int dpi = 0;
@@ -97,6 +96,38 @@ bool DPIFound(int val)
     }
     return found;
 }
+
+BOOL DisableWow64Redirection()
+{
+    BOOL bIsWow64 = FALSE;
+    typedef BOOL(APIENTRY* LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+
+    HMODULE hModule = GetModuleHandle(TEXT("kernel32"));
+    if (hModule == NULL)
+    {
+        return FALSE;
+    }
+
+    LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(
+        hModule, "IsWow64Process");
+
+    if (fnIsWow64Process != NULL)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64))
+        {
+            return FALSE;
+        }
+    }
+
+    if (bIsWow64)
+    {
+        PVOID OldValue = NULL;
+        return Wow64DisableWow64FsRedirection(&OldValue);
+    }
+
+    return TRUE;
+}
+
 int main(int argc, char *argv[])
 {
     auto dpiToSet = 0;
@@ -109,10 +140,13 @@ int main(int argc, char *argv[])
         RESOLUTION_VALUE,
     } resolutionMode = RESOLUTION_SET;
 
+    bool restartExplorer = false;
+
     if (argc <= 1)
     {
-        cout << "1. argument: Resolution in percent, use \"get\" to print the current value instead and \"value\" to print without formatting\n";
+        cout << "1. argument: Scale percent, or \"get\" or \"value\" to display current\n";
         cout << "2. argument: Monitor index, leave empty to use primary monitor\n";
+        cout << "3. argument: Include \"/e\" to restart explorer\n";
         return 0;
     }
 
@@ -134,7 +168,20 @@ int main(int argc, char *argv[])
 
     if (argc >= 3)
     {
-        displayIndex = atoi(argv[2]);
+        // Check if second argument is "/e" or a number
+        if (strcmp(argv[2], "/e") == 0) {
+            restartExplorer = true;
+        }
+        else {
+            displayIndex = atoi(argv[2]);
+        }
+    }
+
+    if (argc >= 4)
+    {
+        if (strcmp(argv[3], "/e") == 0) {
+            restartExplorer = true;
+        }
     }
 
     auto displayDataCache = GetDisplayData();
@@ -142,14 +189,13 @@ int main(int argc, char *argv[])
     {
         if (DPIFound(displayIndex) && 1 <= dpiToSet && dpiToSet <= displayDataCache.size())
         {
-            cout << "Please provide the scale as first and the index as second argument, program will continue for legacy purposes\n";
             auto t = dpiToSet;
             dpiToSet = displayIndex;
             displayIndex = t;
         }
         else
         {
-            cout << "Invalid Monitor ID: " << displayIndex;
+            cout << "Invalid monitor number: " << displayIndex;
             return 0;
         }
     }
@@ -159,7 +205,7 @@ int main(int argc, char *argv[])
     auto currentResolution = DpiHelper::GetDPIScalingInfo(displayDataCache[displayIndex].m_adapterId, displayDataCache[displayIndex].m_sourceID);
     if (resolutionMode == RESOLUTION_GET)
     {
-        cout << "Current Resolution: " << currentResolution.current;
+        cout << "Current scale value: " << currentResolution.current;
         return 0;
     }
     if (resolutionMode == RESOLUTION_VALUE)
@@ -169,7 +215,7 @@ int main(int argc, char *argv[])
     }
     if (!DPIFound(dpiToSet))
     {
-        cout << "Invalid DPI scale value: " << dpiToSet;
+        cout << "Invalid scale value: " << dpiToSet;
         return 0;
     }
     auto success = DpiHelper::SetDPIScaling(displayDataCache[displayIndex].m_adapterId, displayDataCache[displayIndex].m_sourceID, dpiToSet);
@@ -190,7 +236,13 @@ int main(int argc, char *argv[])
             iResult = RegOpenKeyEx(HKEY_CURRENT_USER, sKeyPath, NULL, KEY_ALL_ACCESS, &hKey);
             iResult = RegSetValueEx(hKey, L"AppliedDPI", NULL, REG_DWORD, (const BYTE*)&value, sizeof(value));
             RegCloseKey(hKey);
-            return 0;
         }
     }
+    if (restartExplorer) {
+        DisableWow64Redirection();
+        system("taskkill /f /im explorer.exe");
+        Sleep(100);
+        system("start explorer.exe");
+    }
+    return 0;
 }
