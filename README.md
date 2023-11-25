@@ -41,4 +41,4 @@ To get the current scale of a monitor, replace the scale argument with `get` to 
 
 ## Credits
 
-The whole credits go to @lihas of this project, https://github.com/lihas/windows-DPI-scaling-sample it was not possible without his findings.
+https://github.com/lihas/windows-DPI-scaling-sample
