@@ -4,14 +4,16 @@
 
 This is a console app to change the windows display scaling setting via the command line. It supports multiple monitors.
 
+Only the preset display scaling values are supported, such as 100, 125, 150, 175, and so on. Custom display scaling values cannot be used.
+
 This app is a fork of https://github.com/imniko/SetDPI. It provides all of the functionality of the original, but also supports an additional optional argument to restart Explorer and runs on both 32 bit and 64 bit Windows.
 
 # How to Download and Run
 
 1. Download the zip file using the link above.
 2. Extract **SetDPI.exe**.
-3. Open a Cmd prompt and run **SetDPI.exe** with the appropriate arguments to set .
-5. Use **SetDPI.exe** from the Cmd prompt, or from your own script, to set the display scaling value.
+3. Open a Cmd prompt and run **SetDPI.exe** with the appropriate arguments.
+5. Optionally create one or more **SetDPI.exe** shortcuts for the scaling values you need.
 
 **Note**: Some antivirus software may falsely detect the download as a virus. This can happen any time you download a new executable and may require extra steps to whitelist the file.
 
