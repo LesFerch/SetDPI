@@ -8,7 +8,7 @@ Only the preset display scaling values are supported, such as 100, 125, 150, 175
 
 This app is a fork of <https://github.com/imniko/SetDPI>. It provides all of the functionality of the original, but also supports an additional optional argument to restart Explorer and runs on both 32 bit and 64 bit Windows.
 
-# How to Download and Run
+## How to Download and Run
 
 1. Download the zip file using the link above.
 2. Extract **SetDPI.exe**.
