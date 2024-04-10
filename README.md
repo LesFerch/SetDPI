@@ -1,6 +1,6 @@
 # SetDPI
 
-[![image](https://user-images.githubusercontent.com/79026235/152910441-59ba653c-5607-4f59-90c0-bc2851bf2688.png)Download the zip file](https://github.com/LesFerch/SetDPI/releases/download/1.1.0/SetDPI.zip)
+[![image](https://github.com/LesFerch/WinSetView/assets/79026235/0188480f-ca53-45d5-b9ff-daafff32869e)Download the zip file](https://github.com/LesFerch/SetDPI/releases/download/1.1.0/SetDPI.zip)
 
 This is a console app to change the windows display scaling setting via the command line. It supports multiple monitors.
 
@@ -44,3 +44,7 @@ Display the scale of monitor 2: `SetDPI value 2` displays `125`
 ## Credits
 
 <https://github.com/lihas/windows-DPI-scaling-sample>
+
+\
+\
+[![image](https://github.com/LesFerch/WinSetView/assets/79026235/63b7acbc-36ef-4578-b96a-d0b7ea0cba3a)](https://github.com/LesFerch/SetDPI)
